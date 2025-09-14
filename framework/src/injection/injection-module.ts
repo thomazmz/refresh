@@ -1,14 +1,18 @@
+import * as Core from '@refresh/framework/core'
 import { InjectionContext } from './injection-context';
 import { InjectionContainer } from './injection-container';
+import { InjectionInitializer } from './injection-initializer';
 import { InjectionRegistration } from './injection-registration';
 
-export class InjectionModule extends InjectionContainer {
+export class InjectionModule extends InjectionContainer implements Core.Initializer {
 
   public static create(context?: InjectionContext): InjectionModule {
     return new InjectionModule(context ?? InjectionContext.create())
   }
 
   protected readonly modules: Set<InjectionModule> = new Set()
+  
+  protected readonly initializers: Set<InjectionInitializer> = new Set()
 
   protected get entries(): [InjectionRegistration.Token, InjectionRegistration][] {
     const entries = [...this.modules].flatMap(module => {
@@ -28,11 +32,60 @@ export class InjectionModule extends InjectionContainer {
     modules.forEach((module) => this.useModule(module))
   }
 
+  public useInitializer<T>(initializer: InjectionInitializer<T>): void {
+    this.initializers.add(initializer.clone())
+  }
+
+  public useInitializers(initializers: InjectionInitializer[]): void {
+    initializers.forEach(initializer => this.useInitializer(initializer))
+  }
+
   public clone(context?: InjectionContext | undefined): InjectionModule {
     const module = InjectionModule.create(context)
     module.useModules([...this.modules.values()])
     // module.useInitializers([...this.initializers.values()])
     module.useRegistrations([...this.registrations.values()])
     return module
+  }
+
+  public registerInitializer<T>(token: InjectionRegistration.Token, target: InjectionInitializer.DeclarationTarget<T>, options: Omit<InjectionInitializer.DeclarationOptions<T>, 'initializer' | 'token'>): void {
+    this.useInitializer(InjectionInitializer.create({ ...options, token, initializer: target }))
+  }
+
+  public register<T extends object>(token: InjectionRegistration.Token, options: Omit<InjectionContainer.FactoryOptions<T>, 'token'>): void
+
+  public register<T extends object>(token: InjectionRegistration.Token, options: Omit<InjectionContainer.ClassOptions<T>, 'token'>): void
+ 
+  public register<T>(token: InjectionRegistration.Token, options: Omit<InjectionInitializer.DeclarationOptions<T>, 'token'>): void;
+
+  public register<T>(token: InjectionRegistration.Token, options: Omit<InjectionContainer.FunctionOptions<T>, 'token'>): void
+
+  public register<T>(token: InjectionRegistration.Token, options: Omit<InjectionContainer.ValueOptions<T>, 'token'>): void
+
+  public register<T>(token: InjectionRegistration.Token, options: any): void {
+    'initializer' in options
+      ? this.useInitializer(InjectionInitializer.create({ ...options, token }))
+      : super.register(token, options)
+  }
+
+  public async initialize(options?: InjectionRegistration.ResolutionOptions) {
+    for await (const module of this.modules) {
+      await module.initialize(options)
+    }
+
+    for await (const initializer of this.initializers) {
+      const registration = await initializer.initialize(options)
+      this.useRegistration(registration)
+    }
+  }
+
+  public async terminate(): Promise<void> {
+    for await (const module of this.modules) {
+      await module.terminate()
+    }
+
+    for await (const initializer of this.initializers) {
+      await initializer.terminate()
+    }
   }
 }
