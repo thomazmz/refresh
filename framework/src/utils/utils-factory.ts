@@ -4,12 +4,12 @@ export type UtilsFactory<R extends object = object, P extends Array<any> = any[]
 
 export declare namespace UtilsFactory {
   export type Return<F extends UtilsFunction> = ReturnType<F>
+
   export type Params<F extends UtilsFunction> = Parameters<F>
 }
 
-
-export const UtilsFactory = Object.freeze({
+export const UtilsFactory = Object.freeze(Object.assign({ ...UtilsFunction,
   parameters(target: UtilsFactory): string[] {
-    throw new Error('Not Implemented')
+    return UtilsFunction.parameters(target)
   }
-})
+}))
