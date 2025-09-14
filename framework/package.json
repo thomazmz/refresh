@@ -1,0 +1,31 @@
+{
+  "name": "@refresh/framework",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "exports": {
+    "./*": {
+      "types": "./dist/*/library.d.ts",
+      "import": "./dist/*/library.js",
+      "require": "./dist/*/library.js"
+    }
+  },
+  "scripts": {
+    "test": "jest --config ./jest.json",
+    "build": "rimraf dist && tsc --project ./build.json",
+    "build:watch": "tsc --watch --project ./build.json"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.2.1",
+    "@types/body-parser": "^1.19.6",
+    "@types/cors": "^2.8.19",
+    "jest": "^30.0.5",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
