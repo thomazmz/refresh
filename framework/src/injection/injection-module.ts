@@ -43,7 +43,7 @@ export class InjectionModule extends InjectionContainer implements Core.Initiali
   public clone(context?: InjectionContext | undefined): InjectionModule {
     const module = InjectionModule.create(context)
     module.useModules([...this.modules.values()])
-    // module.useInitializers([...this.initializers.values()])
+    module.useInitializers([...this.initializers.values()])
     module.useRegistrations([...this.registrations.values()])
     return module
   }
