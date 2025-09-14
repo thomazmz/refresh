@@ -4,13 +4,12 @@
   "rootDir": "./src",
   "testMatch": ["**/*.test.ts"],
   "testEnvironment": "node",
-  "globals": {
-    "ts-jest": {
-      "tsconfig": "./tsconfig.json"
-    }
-  },
   "transform": {
-    "^.+\\.ts$": "ts-jest"
+    "^.+\\.ts$": ["ts-jest", {
+      "tsconfig": {
+        "isolatedModules": true
+      }
+    }]
   },
   "moduleNameMapper": {
     "^@refresh/framework/(.+)$": "<rootDir>/$1/library.ts"
