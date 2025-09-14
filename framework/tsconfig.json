@@ -26,7 +26,6 @@
     "skipLibCheck": true,
     "strictBindCallApply": false,
     "strictNullChecks": true,
-    
     "paths": {
       "@refresh/framework/*": ["*/library.ts"]
     }
