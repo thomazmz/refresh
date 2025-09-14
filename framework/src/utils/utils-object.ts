@@ -15,5 +15,5 @@ export declare namespace UtilsObject {
 }
 
 export const UtilsObject = {
-  ...globalThis.Object,
+  // Methods to be included
 }
