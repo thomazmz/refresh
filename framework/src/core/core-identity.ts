@@ -24,24 +24,30 @@ export const CoreIdentity = Object.freeze({
   ] as const),
 
   create() {
-    // Declare an v4 uuid for randomness
+    // Declare an v4 uuid for randomness.
     const uuid = Crypto.randomUUID()
   
-    // Remove dashes from the UUID string to get a raw 32-character hex string.
+    // Remove dashes from the UUID string.
     const hex = uuid.replace(/-/g, '')
-    // Convert the hex string into a Buffer (16 bytes = 128 bits).
+    // Convert the string into a Buffer.
     const buffer = Buffer.from(hex, 'hex')
     // Convert the buffer into a BigInt for base conversion.
     let number = BigInt('0x' + buffer.toString('hex'))
-    // Declare the base62 output
-    let base62 = ''
 
-    // Converts the BigInt from base 10 into base 62.
+    // Now that the original uuid string was turned into a
+    // number, this while block will take care of converting
+    // the obtained number from base 10 into base 62.
+    let base62 = ''
     while (number > 0n) {
       // Get remainder of division by 62
       const remainder = Number(number % 62n)
       // Get the correspondent alphabet character
-      base62 = CoreIdentity.CHARACTERS[remainder] + base62
+      const character = CoreIdentity.CHARACTERS[remainder]
+      // We want the most significant digit to appear
+      // on the left side of the number, thus, we should
+      // append the character to the left side of the
+      // base62 result.
+      base62 = character + base62
       // Divide the number by 62 to shift right
       number /= 62n
     }

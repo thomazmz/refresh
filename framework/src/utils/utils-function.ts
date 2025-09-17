@@ -55,12 +55,16 @@ export const UtilsFunction = Object.freeze({
         throw new Error('The provided function code could not be parsed into a function AST expression')
       }
 
+      // locate the first property whose value is either a normal
+      // function expression or an arrow function expression.
       const property = expression.properties.find((property) => {
         return (property.type === 'Property') 
           && (property.value.type === 'FunctionExpression'
             || property.value.type === 'ArrowFunctionExpression')
       }) as estree.Property | undefined
 
+      // Narrow the value down to only the cases we care
+      // about: FunctionExpression or ArrowFunctionExpression.
       const value = property?.value as undefined
         | estree.ArrowFunctionExpression
         | estree.FunctionExpression 
