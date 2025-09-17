@@ -136,7 +136,7 @@ export class InjectionRegistration<T = any> {
       this.provision = options.provision ?? InjectionRegistration.DEFAULT_PROVISION_MODE
       this.visibility = options.visibility ?? InjectionRegistration.DEFAULT_VISIBILITY_MODE
       this.parameters = this.provision === 'parameters'
-        ? Utils.Function.parameters(options.function)
+        ? Utils.Function.extractParameters(options.function)
         : undefined
     }
 
@@ -160,7 +160,7 @@ export class InjectionRegistration<T = any> {
       this.visibility = options.visibility ?? InjectionRegistration.DEFAULT_VISIBILITY_MODE
       this.resolution = options.resolution ?? InjectionRegistration.DEFAULT_RESOLUTION_MODE 
       this.parameters = this.provision === 'parameters'
-        ? Utils.Constructor.parameters(options.class)
+        ? Utils.Constructor.extractParameters(options.class)
         : undefined
     }
   }

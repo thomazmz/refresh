@@ -1,3 +1,5 @@
+import * as Utils from '@refresh/framework/utils'
+
 import * as esprima from 'esprima'
 import * as estree from 'estree'
 
@@ -12,7 +14,7 @@ export declare namespace UtilsConstructor {
 }
 
 export const UtilsConstructor = Object.freeze({
-  parameters(target: UtilsConstructor): string[] {
+  extractParameters(target: UtilsConstructor): string[] {
     // Ensure we the original toString method is
     // used and not one that overrides it.
     const code = Function.prototype.toString.call(target);

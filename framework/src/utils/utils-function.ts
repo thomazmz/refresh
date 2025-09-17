@@ -9,7 +9,7 @@ export declare namespace UtilsFunction {
 }
 
 export const UtilsFunction = Object.freeze({
-  parameters(target: UtilsFunction): string[] {
+  extractParameters(target: UtilsFunction): string[] {
     const code = Function.prototype.toString.call(target).trim()
     
     // try as function or arrow function expression

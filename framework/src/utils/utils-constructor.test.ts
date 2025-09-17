@@ -1,7 +1,7 @@
 import { UtilsConstructor } from './utils-constructor'
 
 describe('UtilsConstructor', () => {
-  describe('parameters', () => {
+  describe('extractParameters', () => {
     it('should return class constructor parameters', () => {
      class SomeClass {
       public constructor(param1: string, param2: number) {
@@ -9,7 +9,7 @@ describe('UtilsConstructor', () => {
       }
      }
 
-     const result = UtilsConstructor.parameters(SomeClass)
+     const result = UtilsConstructor.extractParameters(SomeClass)
      expect(result.length).toBe(2)
      expect(result[0]).toEqual('param1')
      expect(result[1]).toEqual('param2')
@@ -18,12 +18,12 @@ describe('UtilsConstructor', () => {
     it('should return empty parameters array when no constructor is declared for class', () => {
      class SomeClass {}
 
-     const result = UtilsConstructor.parameters(SomeClass)
+     const result = UtilsConstructor.extractParameters(SomeClass)
      expect(result.length).toBe(0)
     })
 
     it('should return anonymous class constructor parameters', () => {
-      const result = UtilsConstructor.parameters(class {
+      const result = UtilsConstructor.extractParameters(class {
         public constructor(param1: string, param2: number) {
           throw new Error('Not to be called!')
         }
@@ -37,7 +37,7 @@ describe('UtilsConstructor', () => {
     it('should return empty parameters array when no constructor is declared for anonymous class', () => {
      class SomeClass {}
 
-     const result = UtilsConstructor.parameters(class {})
+     const result = UtilsConstructor.extractParameters(class {})
      expect(result.length).toBe(0)
     })
   })

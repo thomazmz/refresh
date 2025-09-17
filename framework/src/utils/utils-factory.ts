@@ -10,6 +10,6 @@ export declare namespace UtilsFactory {
 
 export const UtilsFactory = Object.freeze(Object.assign({ ...UtilsFunction,
   parameters(target: UtilsFactory): string[] {
-    return UtilsFunction.parameters(target)
+    return UtilsFunction.extractParameters(target)
   }
 }))
