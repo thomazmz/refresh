@@ -10,43 +10,66 @@ export declare namespace UtilsFunction {
 
 export const UtilsFunction = Object.freeze({
   parameters(target: UtilsFunction): string[] {
-    // Ensure we the original toString method is
-    // used and not one that overrides it.
-    const code = Function.prototype.toString.call(target);
-  
-    // There exists native code that we can not
-    // get parameters for. This shortcuts these
-    // cases into an empty array.
-    if (/\{\s*\[native code\]\s*\}/.test(code)) {
-      throw new Error('Cannot parameters for native code.')
-    };
+    const code = Function.prototype.toString.call(target).trim()
+    
+    // try as function or arrow function expression
+    let envelope = `(${code})`;
+    try {
+      const program = esprima.parseScript(envelope, { range: true }) as estree.Program
+      const statement = program.body[0] as estree.ExpressionStatement | undefined
+      const expression = statement?.expression
+    
+      // We can not continue in case the AST parsed code
+      // does not yield a valid expression.
+      if(!expression) {
+        throw new Error('The provided function code could not be parsed into an AST expression')
+      }
+    
+      // We can not continue in case the AST parsed code 
+      // does not yield a valid function expression.
+      if(!(expression.type === 'FunctionExpression' || expression.type === 'ArrowFunctionExpression')) {
+        throw new Error('The provided function code could not be parsed into a function AST expression')
+      }
 
-    // Wrapping the code into parenthesis make sure
-    // both arrow functions and regular functions 
-    // expressions are parsed safelly.
-    const wrapped = `(${code})`;
+      return expression.params.map(parameter => {
+        return envelope.slice(...(parameter.range as [number, number]))
+      });
+    } catch { /* fall through */ }
 
-    // Check https://docs.esprima.org/en/latest/syntactic-analysis.html
-    const program = esprima.parseScript(wrapped, { range: true }) as estree.Program;
-    const statement = program.body[0] as estree.ExpressionStatement | undefined;
-    const expression = statement?.expression;
-  
-    // We can not continue in case the AST parsed code
-    // does not yield a valid expression.
-    if(!expression) {
-      throw new Error('The provided function code could not be parsed into an AST expression')
-    }
-  
-    // We can not continue in case the AST parsed code 
-    // does not yield a valid function expression.
-    if(!(expression.type === 'FunctionExpression' || expression.type === 'ArrowFunctionExpression')) {
-      throw new Error('The provided function code could not be parsed into a function AST expression')
-    }
-  
-    return expression.params.map(parameter => {
-      // The range method returns a tupple of two numbers
-      // that we sohuld spread into the slice constructor.
-      return wrapped.slice(...parameter.range as [number, number]);
-    });
+    // try as object shorthand method
+    envelope = `({ ${code} })`
+    try {
+      const program = esprima.parseScript(envelope, { range: true }) as estree.Program
+      const statement = program.body[0] as estree.ExpressionStatement | undefined
+      const expression = statement?.expression
+    
+      // We can not continue in case the AST parsed code
+      // does not yield a valid expression.
+      if(!expression) {
+        throw new Error('The provided function code could not be parsed into an AST expression')
+      }
+    
+      // We can not continue in case the AST parsed code 
+      // does not yield a valid object expression.
+      if(!(expression.type === 'ObjectExpression')) {
+        throw new Error('The provided function code could not be parsed into a function AST expression')
+      }
+
+      const property = expression.properties.find((property) => {
+        return (property.type === 'Property') 
+          && (property.value.type === 'FunctionExpression'
+            || property.value.type === 'ArrowFunctionExpression')
+      }) as estree.Property | undefined
+
+      const value = property?.value as undefined
+        | estree.ArrowFunctionExpression
+        | estree.FunctionExpression 
+
+      return value?.params.map(parameter => {
+        return envelope.slice(...(parameter.range as [number, number]))
+      }) ?? [];
+    } catch { /* fall through */ }
+
+    throw new Error('Could not parse target. The provided target is not a valid function.')
   }
 })

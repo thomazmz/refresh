@@ -44,5 +44,34 @@ describe('UtilsFunction', () => {
       expect(result[0]).toEqual('param1')
       expect(result[1]).toEqual('param2')
     })
+
+    it('should return parameters for object-literal shorthand method (via descriptor)', () => {
+      const obj = {
+        foo(param1: string, param2: number) {
+          throw new Error('Not to be called!');
+        }
+      };
+    
+      const desc = Object.getOwnPropertyDescriptor(obj, 'foo')!;
+      const result = UtilsFunction.parameters(desc.value as any);
+    
+      expect(result.length).toBe(2);
+      expect(result[0]).toEqual('param1');
+      expect(result[1]).toEqual('param2');
+    });
+    
+    it('should return parameters for class method (via descriptor)', () => {
+      class C {
+        bar(param1: string, param2: number) {
+          throw new Error('Not to be called!');
+        }
+      }
+      const desc = Object.getOwnPropertyDescriptor(C.prototype, 'bar')!;
+      const result = UtilsFunction.parameters(desc.value as any);
+    
+      expect(result.length).toBe(2);
+      expect(result[0]).toEqual('param1');
+      expect(result[1]).toEqual('param2');
+    });
   })
 })
