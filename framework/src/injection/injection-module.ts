@@ -48,7 +48,7 @@ export class InjectionModule extends InjectionContainer implements Core.Initiali
     return module
   }
 
-  public registerInitializer<T>(token: InjectionRegistration.Token, target: InjectionInitializer.DeclarationTarget<T>, options: Omit<InjectionInitializer.DeclarationOptions<T>, 'initializer' | 'token'>): void {
+  public registerInitializer<T>(token: InjectionRegistration.Token, target: InjectionInitializer.DeclarationTarget<T>, options?: Omit<InjectionInitializer.DeclarationOptions<T>, 'initializer' | 'token'>): void {
     this.useInitializer(InjectionInitializer.create({ ...options, token, initializer: target }))
   }
 
