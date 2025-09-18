@@ -1,5 +1,7 @@
 export { CoreConfig as Config } from './core-config'
+export { CoreLogger as Logger } from './core-logger'
 export { CoreIdentity as Identity } from './core-identity'
 export { CoreValidator as Validator } from './core-validator'
 export { CoreInitializer as Initializer } from './core-initializer'
 export { CoreConfigValidator as ConfigValidator } from './core-config-validator' 
+export { CoreConfigInitializer as ConfigInitializer } from './core-config-initializer'
