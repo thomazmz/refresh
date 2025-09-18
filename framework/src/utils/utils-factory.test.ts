@@ -1,20 +1,20 @@
-import { UtilsFactory } from './utils-factory'
+import { _Factory } from './utils-factory'
 
-describe('UtilsFactory', () => {
-  describe('parameters', () => {
+describe('_Factory', () => {
+  describe('extractParameters', () => {
     it('should return regular function declaration parameters', () => {
      const arrowFunction = (param1: string, param2: number) => {
         throw new Error('Not to be called!')
      }
 
-     const result = UtilsFactory.parameters(arrowFunction)
+     const result = _Factory.extractParameters(arrowFunction)
      expect(result.length).toBe(2)
      expect(result[0]).toEqual('param1')
      expect(result[1]).toEqual('param2')
     })
 
     it('should return anonymous regular function declaration parameters', () => {
-      const result = UtilsFactory.parameters((param1: string, param2: number) => {
+      const result = _Factory.extractParameters((param1: string, param2: number) => {
         throw new Error('Not to be called!')
      })
 
@@ -29,14 +29,14 @@ describe('UtilsFactory', () => {
         throw new Error('Not to be called!')
       }
 
-      const result = UtilsFactory.parameters(regularFunction)
+      const result = _Factory.extractParameters(regularFunction)
       expect(result.length).toBe(2)
       expect(result[0]).toEqual('param1')
       expect(result[1]).toEqual('param2')
     })
 
     it('should return anonymous arrow function declaration parameters', () => {
-      const result = UtilsFactory.parameters(function regularFunction(param1: string, param2: number) {
+      const result = _Factory.extractParameters(function regularFunction(param1: string, param2: number) {
         throw new Error('Not to be called!')
       })
 

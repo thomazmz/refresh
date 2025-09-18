@@ -1,15 +1,15 @@
 import * as esprima from 'esprima'
 import * as estree from 'estree'
 
-export type UtilsFunction<R = any, P extends Array<any> = any[]> = (...args: P) => R
+export type _Function<R = any, P extends Array<any> = any[]> = (...args: P) => R
 
-export declare namespace UtilsFunction {
-  export type Return<F extends UtilsFunction> = ReturnType<F>
-  export type  Prameters<F extends UtilsFunction> = Parameters<F>
+export declare namespace _Function {
+  export type Return<F extends _Function> = ReturnType<F>
+  export type  Prameters<F extends _Function> = Parameters<F>
 }
 
-export const UtilsFunction = Object.freeze({
-  extractParameters(target: UtilsFunction): string[] {
+export const _Function = Object.freeze({
+  extractParameters(target: _Function): string[] {
     const code = Function.prototype.toString.call(target).trim()
     
     // try as function or arrow function expression
@@ -32,7 +32,7 @@ export const UtilsFunction = Object.freeze({
       }
 
       return expression.params.map(parameter => {
-        return envelope.slice(...(parameter.range as [number, number]))
+        return envelope.slice(...(parameter.range ?? [0,0]))
       });
     } catch { /* fall through */ }
 
@@ -55,7 +55,7 @@ export const UtilsFunction = Object.freeze({
         throw new Error('The provided function code could not be parsed into a function AST expression')
       }
 
-      // locate the first property whose value is either a normal
+      // Locate the first property whose value is either a normal
       // function expression or an arrow function expression.
       const property = expression.properties.find((property) => {
         return (property.type === 'Property') 
@@ -70,10 +70,10 @@ export const UtilsFunction = Object.freeze({
         | estree.FunctionExpression 
 
       return value?.params.map(parameter => {
-        return envelope.slice(...(parameter.range as [number, number]))
+        return envelope.slice(...(parameter.range ?? [0,0]))
       }) ?? [];
     } catch { /* fall through */ }
 
     throw new Error('Could not parse target. The provided target is not a valid function.')
-  }
+  },
 })

@@ -1,4 +1,4 @@
-export { UtilsConstructor as Constructor } from './utils-constructor'
-export { UtilsFactory as Factory } from './utils-factory'
-export { UtilsFunction as Function } from './utils-function'
-export { UtilsObject as Object } from './utils-object'
+export { _Constructor as Constructor } from './utils-constructor'
+export { _Function as Function } from './utils-function'
+export { _Factory as Factory } from './utils-factory'
+export { _Object as Object } from './utils-object'

@@ -1,20 +1,17 @@
-import * as Utils from '@refresh/framework/utils'
-
 import * as esprima from 'esprima'
 import * as estree from 'estree'
 
-export type UtilsConstructor<R extends object = object, P extends Array<any> = Array<any>> = 
+export type _Constructor<R extends object = object, P extends Array<any> = Array<any>> = 
   | ( new (...params: P) => R ) 
   | { new (...params: P): R }
 
-export declare namespace UtilsConstructor {
-  export type Instance<C extends UtilsConstructor> = InstanceType<C>
-
-  export type Parameters<C extends UtilsConstructor> = C extends new (...args: infer P) => any ? P : never;
+export declare namespace _Constructor {
+  export type Instance<C extends _Constructor> = InstanceType<C>
+  export type Parameters<C extends _Constructor> = C extends new (...args: infer P) => any ? P : never;
 }
 
-export const UtilsConstructor = Object.freeze({
-  extractParameters(target: UtilsConstructor): string[] {
+export const _Constructor = Object.freeze({
+  extractParameters(target: _Constructor): string[] {
     // Ensure we the original toString method is
     // used and not one that overrides it.
     const code = Function.prototype.toString.call(target);
