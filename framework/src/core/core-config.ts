@@ -23,16 +23,15 @@ export const CoreConfig = Object.freeze({
     return Object.freeze(profile) 
   },
   
-  number(key: CoreConfig.Key, value?: number): CoreConfig.Tupple<number> {
+  number<T extends number = number>(key: CoreConfig.Key, value?: T): CoreConfig.Tupple<number> {
     return [key, CoreConfigValidator.number(), value]
   },
   
-  string(key: CoreConfig.Key, value?: string): CoreConfig.Tupple<string> {
+  string<T extends string = string>(key: CoreConfig.Key, value?: T): CoreConfig.Tupple<string> {
     return [key, CoreConfigValidator.string(), value]
   },
   
-  boolean(key: CoreConfig.Key, value?: boolean): CoreConfig.Tupple<boolean> {
+  boolean<T extends boolean = boolean>(key: CoreConfig.Key, value?: T): CoreConfig.Tupple<boolean> {
     return [key, CoreConfigValidator.boolean(), value]
   },
 })
-
