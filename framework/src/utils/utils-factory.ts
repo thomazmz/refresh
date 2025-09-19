@@ -7,8 +7,8 @@ export declare namespace _Factory {
   export type Params<F extends _Function> = Parameters<F>
 }
 
-export const _Factory = Object.freeze(Object.assign({
+export const _Factory = Object.freeze({
   extractParameters(target: _Factory): string[] {
     return _Function.extractParameters(target)
   }
-}))
+})
