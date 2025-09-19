@@ -7,7 +7,7 @@ export declare namespace InjectionInitializer {
 
   export type DeclarationOptions<T> = {
     token: InjectionRegistration.Token
-    visibility: InjectionRegistration.VisibilityMode
+    visibility?: InjectionRegistration.VisibilityMode
     initializer: DeclarationTarget<T>
   }
 }

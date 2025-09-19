@@ -69,6 +69,12 @@ export class InjectionModule extends InjectionContainer implements Core.Initiali
   }
 
   public async initialize(options?: InjectionRegistration.ResolutionOptions) {
+    if(!options?.context) {
+      return this.initialize({...options,
+        context: InjectionContext.create()
+      })
+    }
+
     for await (const module of this.modules) {
       await module.initialize(options)
     }
