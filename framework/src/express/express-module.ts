@@ -62,12 +62,12 @@ export class ExpressModule extends Injection.Module {
             return request.params[parameter]
           })
 
-          // Finally, this calls the controller method (operation)
-          // and handles the returned value either as a promise or
-          // as a synchronous operation.
+          // Finally, this calls the controller method (identified by
+          // the metadata.key) and handles the returned value either
+          // as a promise or as a synchronous operation.
           const promise = (() => {
             try {
-              return Promise.resolve(controller[metadata.key](...arguments))
+              return Promise.resolve(controller[metadata.key](...argumentz))
             } catch(error: unknown) {
               return Promise.resolve(error)
             }
