@@ -1,12 +1,12 @@
 import * as Http from '@refresh/framework/http';
 import * as Utils from '@refresh/framework/utils';
 import { ControllerInputMetadata } from './controller-input-metadata';
-import { ControllerMethodMetadata } from './controller-method-metadata';
-import { ControllerClassMetadata } from './controller-class-metadata';
+import { ControllerRouteMetadata } from './controller-route-metadata';
+import { ControllerRouterMetadata } from './controller-router-metadata';
 
-export type ControllerAggregate = ControllerClassMetadata & {
+export type ControllerAggregate = ControllerRouterMetadata & {
   path: string,
-  routes: (ControllerMethodMetadata & {
+  routes: (ControllerRouteMetadata & {
     inputs: ControllerInputMetadata
     success: Http.Status
     method: Http.Method
@@ -23,7 +23,7 @@ export const ControllerAggregate = Object.freeze({
     })
 
     const routes = members.map((member) => {
-      const methodMetadata = ControllerMethodMetadata.extract(member)
+      const methodMetadata = ControllerRouteMetadata.extract(member)
       const inputMetadata = ControllerInputMetadata.extract(member)
       return { ...methodMetadata,
         success: methodMetadata.success ?? Http.Status.Ok,
@@ -32,7 +32,7 @@ export const ControllerAggregate = Object.freeze({
       }
     })
 
-    const routerMetadata = ControllerClassMetadata.extract(controller)
+    const routerMetadata = ControllerRouterMetadata.extract(controller)
     return { ...routerMetadata,
       path: routerMetadata.path ?? '/',
       name: routerMetadata.name ?? controller.name,

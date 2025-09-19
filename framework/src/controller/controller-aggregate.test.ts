@@ -1,11 +1,11 @@
 import * as Http from '@refresh/framework/http'
-import * as MethodDecorators from './controller-method-decorators'
+import * as MethodDecorators from './controller-route-decorators'
 import * as InputDecorators from './controller-input-decorators'
-import * as ClassDecorators from './controller-class-decorators'
+import * as ClassDecorators from './controller-router-decorators'
 import { ControllerAggregate } from './controller-aggregate';
 
 describe('ControllerAggregate', () => {
-  it('should resolve default metadata', () => {
+  it('should resolve default aggregate metadata', () => {
 
     @ClassDecorators.Router('/routee')
     class RouteeController {
@@ -37,7 +37,7 @@ describe('ControllerAggregate', () => {
     })
   })
 
-  it('should aggregate metadata', () => {
+  it('should resolve explicit aggregate metadata', () => {
 
     @ClassDecorators.Name('Routee')
     @ClassDecorators.Router('/routee')

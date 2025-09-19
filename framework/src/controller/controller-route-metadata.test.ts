@@ -1,10 +1,10 @@
-import { ControllerMethodMetadata } from './controller-method-metadata'
+import { ControllerRouteMetadata } from './controller-route-metadata'
 
-describe('ControllerMethodMetadata', () => {
+describe('ControllerRouteMetadata', () => {
   it('should attach and extract all metadata fields', () => {
     const descriptor = { value: function() {} }
 
-    ControllerMethodMetadata.attach(descriptor, {
+    ControllerRouteMetadata.attach(descriptor, {
       description: 'desc',
       operation: 'op',
       summary: 'sum',
@@ -13,7 +13,7 @@ describe('ControllerMethodMetadata', () => {
       path: '/foo',
     });
 
-    const extracted = ControllerMethodMetadata.extract(descriptor);
+    const extracted = ControllerRouteMetadata.extract(descriptor);
 
     expect(extracted).toEqual({
       description: 'desc',
@@ -28,17 +28,17 @@ describe('ControllerMethodMetadata', () => {
   it('should merge metadata fields', () => {
     const descriptor = { value: function() {} }
 
-    ControllerMethodMetadata.attach(descriptor, {
+    ControllerRouteMetadata.attach(descriptor, {
       method: 'post', 
       summary: 'sum'
     });
 
-    ControllerMethodMetadata.attach(descriptor, {
+    ControllerRouteMetadata.attach(descriptor, {
       description: 'desc',
       key: 'k2'
     });
 
-    const extracted = ControllerMethodMetadata.extract(descriptor);
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: 'desc',
       operation: undefined,
@@ -53,16 +53,16 @@ describe('ControllerMethodMetadata', () => {
   it('should override metadata fields', () => {
     const descriptor = { value: function() {} }
 
-    ControllerMethodMetadata.attach(descriptor, {
+    ControllerRouteMetadata.attach(descriptor, {
       method: 'post',
     });
 
-    ControllerMethodMetadata.attach(descriptor, {
+    ControllerRouteMetadata.attach(descriptor, {
       description: 'desc',
       method: 'get',
     });
 
-    const extracted = ControllerMethodMetadata.extract(descriptor);
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: 'desc',
       operation: undefined,
@@ -77,7 +77,7 @@ describe('ControllerMethodMetadata', () => {
   it('should return empty metadata when metadata is not attach', () => {
     const descriptor = { value: function() {} }
 
-    const extracted = ControllerMethodMetadata.extract(descriptor);
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -91,8 +91,8 @@ describe('ControllerMethodMetadata', () => {
 
   it('should return empty metadata when descriptor.value is missing', () => {
     const descriptor = {} as any
-    ControllerMethodMetadata.attach(descriptor, { description: 'desc' })
-    const extracted = ControllerMethodMetadata.extract(descriptor)
+    ControllerRouteMetadata.attach(descriptor, { description: 'desc' })
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
