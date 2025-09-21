@@ -1,9 +1,14 @@
+import * as Contract from '@refresh/framework/contract'
 import * as Utils from '@refresh/framework/utils'
+import * as Core from '@refresh/framework/core'
 import * as Http from '@refresh/framework/http'
 
 const CONTROLLER_ROUTE_METADATA_KEY = Symbol('__controller_method_metadata')
 
 export type ControllerRouteMetadata = Readonly<{
+  readonly body?: Core.Validator
+  readonly query?: Core.Validator
+  readonly headers?: Core.Validator
   readonly description?: string | undefined
   readonly operation?: string | undefined
   readonly summary?: string | undefined
@@ -13,28 +18,98 @@ export type ControllerRouteMetadata = Readonly<{
   readonly key?: string | undefined
 }>
 
-export const ControllerRouteMetadata = Object.freeze({
-  attach(descriptor: TypedPropertyDescriptor<Utils.Function>, metadata: ControllerRouteMetadata): void {
-    if (descriptor.value) descriptor.value[CONTROLLER_ROUTE_METADATA_KEY] = { ...descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY],
-      description: metadata.description ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.description,
-      operation: metadata.operation ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation,
-      summary: metadata.summary ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary,
-      success: metadata.success ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success,
-      method: metadata.method ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method,
-      path: metadata.path ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path,
-      key: metadata.key ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key,
-    }
-  },
+export function attachRouteMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>, metadata: ControllerRouteMetadata): void {
+  if (descriptor.value) descriptor.value[CONTROLLER_ROUTE_METADATA_KEY] = { ...descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY],
+    description: metadata.description ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.description,
+    operation: metadata.operation ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation,
+    summary: metadata.summary ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary,
+    success: metadata.success ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success,
+    method: metadata.method ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method,
+    path: metadata.path ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path,
+    key: metadata.key ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key,
+  }
+}
 
-  extract(descriptor: TypedPropertyDescriptor<Utils.Function>, defaults?: ControllerRouteMetadata): ControllerRouteMetadata {
-    return Object.freeze({
-      description: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.description ?? defaults?.description,
-      operation: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation ?? defaults?.operation,
-      summary: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary ?? defaults?.summary,
-      success: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success ?? defaults?.success,
-      method: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method ?? defaults?.method,
-      path: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path ?? defaults?.path,
-      key: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key ?? defaults?.key,
-    })
-  },
+export function extractRouteMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>): ControllerRouteMetadata {
+  return Object.freeze({
+    description: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.description,
+    operation: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation,
+    summary: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary,
+    success: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success,
+    method: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method,
+    path: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path,
+    key: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key,
+  })
+}
+
+export function Summary(summary: string) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    attachRouteMetadata({ ...descriptor }, { key, summary });
+  };
+}
+
+export function Description(description: string) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    return attachRouteMetadata({ ...descriptor }, { key, description });
+  };
+}
+
+export function Operation(operation?: string) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    return attachRouteMetadata({ ...descriptor }, { key, operation });
+  };
+}
+
+export function Success(success: Http.Status, body?: any) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    return attachRouteMetadata({ ...descriptor }, { key, success });
+  };
+}
+
+export function Method(method: Http.Method) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    attachRouteMetadata({ ...descriptor }, { key, method });
+  };
+}
+
+export function Path(path?: string) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    attachRouteMetadata({ ...descriptor }, { key, path });
+  };
+}
+
+export function Body(contract: Utils.Constructor<Contract.Input>) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    throw new Error('Not implemented!')
+  };
+}
+
+export function Headers(contract: Contract.Input) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    throw new Error('Not implemented!')
+  };
+}
+
+export function Query(contract: Contract.Input) {
+  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    throw new Error('Not implemented!')
+  };
+}
+
+export const ControllerRouteDecorators = Object.freeze({
+  Summary,
+  Description,
+  Operation,
+  Success,
+  Method,
+  Path,
+  Body,
+  Headers,
+  Query,
 })
+
+export const ControllerRouteMetadata = Object.freeze({
+  attach: attachRouteMetadata,
+  extract: extractRouteMetadata,
+})
+

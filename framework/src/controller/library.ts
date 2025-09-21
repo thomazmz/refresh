@@ -1,8 +1,16 @@
-
-export { ControllerAggregate as Aggregate } from './controller-aggregate'
-export { ControllerInputMetadata as InputMetadata } from './controller-input-metadata'
+export { ControllerRootMetadata as RootMetadata } from './controller-root-metadata'
 export { ControllerRouteMetadata as RouteMetadata } from './controller-route-metadata'
 export { ControllerRouterMetadata as RouterMetadata } from './controller-router-metadata'
-export * from './controller-input-decorators'
-export * from './controller-route-decorators'
-export * from './controller-router-decorators'
+
+export { Name } from './controller-router-metadata'
+export { Router } from './controller-router-metadata'
+
+export { Body } from './controller-route-metadata'
+export { Description } from './controller-route-metadata'
+export { Headers } from './controller-route-metadata'
+export { Method } from './controller-route-metadata'
+export { Operation } from './controller-route-metadata'
+export { Path } from './controller-route-metadata'
+export { Query } from './controller-route-metadata'
+export { Success } from './controller-route-metadata'
+export { Summary } from './controller-route-metadata'

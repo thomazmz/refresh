@@ -6,22 +6,22 @@ export type ControllerInputMetadata = Readonly<{
   readonly [key: number]: string
 }>
 
-export const ControllerInputMetadata = Object.freeze({
-  attach(descriptor: TypedPropertyDescriptor<Utils.Function>, metadata: ControllerInputMetadata): void {
-    if (descriptor.value) descriptor.value[CONTROLLER_INPUT_METADATA] = {
-      ...(descriptor.value[CONTROLLER_INPUT_METADATA] ?? {}),
-      ...metadata,
-    }
-  },
+function extractInputMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>): ControllerInputMetadata {
+  if (descriptor.value && descriptor.value[CONTROLLER_INPUT_METADATA]) {
+    return descriptor.value[CONTROLLER_INPUT_METADATA]
+  }
 
-  extract(descriptor: TypedPropertyDescriptor<Utils.Function>): ControllerInputMetadata {
-    const parameters = typeof descriptor.value === 'function'
-      ? Utils.Function.extractParameters(descriptor.value)
-      : []
+  if(typeof descriptor.value === 'function') {
+    const parameters = Utils.Function.extractParameters(descriptor.value)
 
     return Object.freeze({
       ...Object.fromEntries(parameters.entries()),
-      ...(descriptor?.value?.[CONTROLLER_INPUT_METADATA] ?? {}),
     });
-  },
+  }
+
+  return descriptor?.value?.[CONTROLLER_INPUT_METADATA] ?? []
+}
+
+export const ControllerInputMetadata = Object.freeze({
+  extract: extractInputMetadata,
 })
