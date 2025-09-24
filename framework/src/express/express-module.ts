@@ -32,7 +32,7 @@ export class ExpressModule extends Injection.Module {
       // result in missing medatata. This should happen before the
       // application handler is declared so that we keep the the
       // returned aggregate static across different http calls.
-      const { path, routes } = Controller.Aggregate.extract(constructor)
+      const { path, routes } = Controller.RootMetadata.extract(constructor)
 
       return applicationRouter.use(path, routes.reduce((controllerRouter, metadata) => {
         // Typescript will suggest converting this to an async
@@ -40,13 +40,16 @@ export class ExpressModule extends Injection.Module {
         // nativelly, we should stick with regular Promise chains
         // so that asyncronicity is handled as explicitly as possible.
         const handler: express.RequestHandler = (request, response, next) => {
+          // Parse all the data comming through the request
+          const body = metadata.body?.parse(request.body) ?? {}
+          const query = metadata.query?.parse(request.query) ?? {}
+          const headers = metadata.headers?.parse(request.headers) ?? {}
 
           // This will resolve the controller instance to be
           // called, allowing dependency injection to happen
           // on the scope of each http request. 
           const controller = this.resolve(constructor)
           
-
           // The strings here are the allowed values to be passed
           // during the controller method call. When no match is
           // found, it attempts to find a request parameter value
@@ -54,9 +57,9 @@ export class ExpressModule extends Injection.Module {
           // allow injection of headers, queries, bodies and any
           // parameters included on the method path declaration.
           const argumentz = Object.values(metadata.inputs).map(parameter => {
-            if(parameter === 'body') return request.body
-            if(parameter === 'query') return request.query
-            if(parameter === 'headers') return request.headers
+            if(parameter === 'body') return body
+            if(parameter === 'query') return query
+            if(parameter === 'headers') return headers
             if(parameter === 'response') return response
             if(parameter === 'request') return request
             return request.params[parameter]
@@ -86,8 +89,8 @@ export class ExpressModule extends Injection.Module {
         }
 
         // Append the route handler to the controller router.
-        // This mimics router.get('/path', (req, res, next) => { ... })
-        return controllerRouter[metadata.method](metadata.path, handler)
+        // This mimics router.get('/path', ...handlers, (req, res, next) => { ... })
+        return controllerRouter[metadata.method](metadata.path, express.json(), handler)
       }, express.Router()))
     }, express.Router())
   }

@@ -29,7 +29,10 @@ export function attachRouteMetadata(descriptor: TypedPropertyDescriptor<Utils.Fu
     operation: metadata.operation ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation,
     summary: metadata.summary ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary,
     success: metadata.success ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success,
+    headers: metadata.headers ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.headers,
     method: metadata.method ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method,
+    query: metadata.query ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.query,
+    body: metadata.body ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.body,
     path: metadata.path ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path,
     key: metadata.key ?? descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key,
   }
@@ -41,7 +44,10 @@ export function extractRouteMetadata(descriptor: TypedPropertyDescriptor<Utils.F
     operation: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.operation,
     summary: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.summary,
     success: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.success,
+    headers: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.headers,
     method: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.method,
+    query: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.query,
+    body: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.body,
     path: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.path,
     key: descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY]?.key,
   })
