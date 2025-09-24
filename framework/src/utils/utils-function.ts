@@ -1,5 +1,3 @@
-import * as esprima from 'esprima'
-import * as estree from 'estree'
 import * as acorn from 'acorn'
 
 export type _Function<R = any, P extends Array<any> = any[]> = (...args: P) => R

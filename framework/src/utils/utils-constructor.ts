@@ -1,8 +1,8 @@
 import * as acorn from 'acorn'
 
 export type _Constructor<R extends object = object, P extends Array<any> = Array<any>> = 
-  | ( new (...params: P) => R ) 
-  | { new (...params: P): R }
+  | ( new (...argumentz: P) => R ) 
+  | { new (...argumentz: P): R }
 
 export declare namespace _Constructor {
   export type Instance<C extends _Constructor> = InstanceType<C>
