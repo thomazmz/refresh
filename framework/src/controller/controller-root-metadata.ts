@@ -1,5 +1,3 @@
-import * as Zod from '@refresh/framework/zod'
-import * as Core from '@refresh/framework/core'
 import * as Http from '@refresh/framework/http';
 import * as Utils from '@refresh/framework/utils';
 import { ControllerInputMetadata } from './controller-input-metadata';
@@ -17,7 +15,11 @@ export type ControllerRootMetadata = ControllerRouterMetadata & {
   })[]
 }
 
-function extractControllerRootMetadata(controller: Utils.Constructor): ControllerRootMetadata {
+export const ControllerRootMetadata = Object.freeze({
+  extract: extractControllerRootMetadata
+})
+
+export function extractControllerRootMetadata(controller: Utils.Constructor): ControllerRootMetadata {
   const routerMetadata = ControllerRouterMetadata.extract(controller)
 
   const routerMembers = Utils.Object.extractMembers(controller.prototype).filter((member) => {
@@ -44,7 +46,3 @@ function extractControllerRootMetadata(controller: Utils.Constructor): Controlle
     })
   }
 }
-
-export const ControllerRootMetadata = Object.freeze({
-  extract: extractControllerRootMetadata
-})

@@ -1,14 +1,18 @@
 import * as Utils from '@refresh/framework/utils';
 
-const CONTROLLER_INPUT_METADATA = Symbol('__controller_input_metadata')
+const CONTROLLER_INPUT_METADATA_KEY = Symbol('__controller_input_metadata')
 
 export type ControllerInputMetadata = Readonly<{
   readonly [key: number]: string
 }>
 
-function extractInputMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>): ControllerInputMetadata {
-  if (descriptor.value && descriptor.value[CONTROLLER_INPUT_METADATA]) {
-    return descriptor.value[CONTROLLER_INPUT_METADATA]
+export const ControllerInputMetadata = Object.freeze({
+  extract: extractInputMetadata,
+})
+
+export function extractInputMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>): ControllerInputMetadata {
+  if (descriptor.value && descriptor.value[CONTROLLER_INPUT_METADATA_KEY]) {
+    return descriptor.value[CONTROLLER_INPUT_METADATA_KEY]
   }
 
   if(typeof descriptor.value === 'function') {
@@ -19,9 +23,5 @@ function extractInputMetadata(descriptor: TypedPropertyDescriptor<Utils.Function
     });
   }
 
-  return descriptor?.value?.[CONTROLLER_INPUT_METADATA] ?? []
+  return descriptor?.value?.[CONTROLLER_INPUT_METADATA_KEY] ?? []
 }
-
-export const ControllerInputMetadata = Object.freeze({
-  extract: extractInputMetadata,
-})

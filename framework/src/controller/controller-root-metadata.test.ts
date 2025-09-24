@@ -1,20 +1,20 @@
 import * as Http from '@refresh/framework/http'
-import { ControllerRootMetadata as RootMetadata } from './controller-root-metadata'
-import { ControllerRouteDecorators as RouteDecorators } from './controller-route-metadata'
-import { ControllerRouterDecorators as RouterDecorators } from './controller-router-metadata'
+import * as RootMetadata from './controller-root-metadata'
+import * as RouteMetadata from './controller-route-metadata'
+import * as RouterMetadata from './controller-router-metadata'
 
 describe('ControllerAggregate', () => {
   it('should resolve default root metadata', () => {
 
-    @RouterDecorators.Router('/routee')
+    @RouterMetadata.Router('/routee')
     class SomeController {
-      @RouteDecorators.Path('/barbarbar')
+      @RouteMetadata.Path('/barbarbar')
       public getBarById(headers: string, query: string, body: string, id: string) {
         throw new Error('Should not be called')
       }
     }
 
-    const rootMetadata = RootMetadata.extract(SomeController)
+    const rootMetadata = RootMetadata.extractControllerRootMetadata(SomeController)
 
     expect(rootMetadata.name).toEqual('SomeController')
     expect(rootMetadata.path).toEqual('/routee')
@@ -38,21 +38,21 @@ describe('ControllerAggregate', () => {
 
   it('should resolve explicit rootMetadata metadata', () => {
 
-    @RouterDecorators.Name('SomeController')
-    @RouterDecorators.Router('/routee')
+    @RouterMetadata.Name('SomeController')
+    @RouterMetadata.Router('/routee')
     class SomeController {
-      @RouteDecorators.Path('/foofoofoo')
-      @RouteDecorators.Method(Http.Method.Post)
-      @RouteDecorators.Success(Http.Status.Created)
-      @RouteDecorators.Operation('CreateFoo')
-      @RouteDecorators.Summary('Create Foo')
-      @RouteDecorators.Description('Creates a nice foo.')
+      @RouteMetadata.Path('/foofoofoo')
+      @RouteMetadata.Method(Http.Method.Post)
+      @RouteMetadata.Success(Http.Status.Created)
+      @RouteMetadata.Operation('CreateFoo')
+      @RouteMetadata.Summary('Create Foo')
+      @RouteMetadata.Description('Creates a nice foo.')
       public createFoo(headers: string, query: string, body: string, id: string) {
         throw new Error('Should not be called')
       }
     }
 
-    const rootMetadata = RootMetadata.extract(SomeController);
+    const rootMetadata = RootMetadata.extractControllerRootMetadata(SomeController);
 
     expect(rootMetadata.name).toEqual('SomeController')
     expect(rootMetadata.path).toEqual('/routee')

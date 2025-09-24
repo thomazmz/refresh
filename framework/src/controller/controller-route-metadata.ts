@@ -6,9 +6,9 @@ import * as Http from '@refresh/framework/http'
 const CONTROLLER_ROUTE_METADATA_KEY = Symbol('__controller_method_metadata')
 
 export type ControllerRouteMetadata = Readonly<{
-  readonly body?: Core.Validator
-  readonly query?: Core.Validator
-  readonly headers?: Core.Validator
+  readonly body?: typeof Contract.Input
+  readonly query?: typeof Contract.Input
+  readonly headers?: typeof Contract.Input
   readonly description?: string | undefined
   readonly operation?: string | undefined
   readonly summary?: string | undefined
@@ -17,6 +17,11 @@ export type ControllerRouteMetadata = Readonly<{
   readonly path?: string | undefined
   readonly key?: string | undefined
 }>
+
+export const ControllerRouteMetadata = Object.freeze({
+  attach: attachRouteMetadata,
+  extract: extractRouteMetadata,
+})
 
 export function attachRouteMetadata(descriptor: TypedPropertyDescriptor<Utils.Function>, metadata: ControllerRouteMetadata): void {
   if (descriptor.value) descriptor.value[CONTROLLER_ROUTE_METADATA_KEY] = { ...descriptor?.value?.[CONTROLLER_ROUTE_METADATA_KEY],
@@ -60,7 +65,7 @@ export function Operation(operation?: string) {
   };
 }
 
-export function Success(success: Http.Status, body?: any) {
+export function Success(success: Http.Status) {
   return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
     return attachRouteMetadata({ ...descriptor }, { key, success });
   };
@@ -78,38 +83,20 @@ export function Path(path?: string) {
   };
 }
 
-export function Body(contract: Utils.Constructor<Contract.Input>) {
+export function Body(contract: typeof Contract.Input) {
   return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
-    throw new Error('Not implemented!')
+    attachRouteMetadata({ ...descriptor }, { key, body: contract });
   };
 }
 
-export function Headers(contract: Contract.Input) {
+export function Headers(contract: typeof Contract.Input) {
   return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
-    throw new Error('Not implemented!')
+    attachRouteMetadata({ ...descriptor }, { key, headers: contract });
   };
 }
 
-export function Query(contract: Contract.Input) {
-  return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
-    throw new Error('Not implemented!')
+export function Query(contract: typeof Contract.Input) {
+return (_: unknown, key: string, descriptor: TypedPropertyDescriptor<Utils.Function>) => {
+    attachRouteMetadata({ ...descriptor }, { key, query: contract });
   };
 }
-
-export const ControllerRouteDecorators = Object.freeze({
-  Summary,
-  Description,
-  Operation,
-  Success,
-  Method,
-  Path,
-  Body,
-  Headers,
-  Query,
-})
-
-export const ControllerRouteMetadata = Object.freeze({
-  attach: attachRouteMetadata,
-  extract: extractRouteMetadata,
-})
-

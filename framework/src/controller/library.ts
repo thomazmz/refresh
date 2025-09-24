@@ -1,10 +1,8 @@
 export { ControllerRootMetadata as RootMetadata } from './controller-root-metadata'
 export { ControllerRouteMetadata as RouteMetadata } from './controller-route-metadata'
 export { ControllerRouterMetadata as RouterMetadata } from './controller-router-metadata'
-
 export { Name } from './controller-router-metadata'
 export { Router } from './controller-router-metadata'
-
 export { Body } from './controller-route-metadata'
 export { Description } from './controller-route-metadata'
 export { Headers } from './controller-route-metadata'
