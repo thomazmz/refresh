@@ -1,5 +1,5 @@
 export { InjectionBundle as Bundle } from './injection-bundle'
 export { InjectionModule as Module } from './injection-module'
 export { InjectionContext as Context } from './injection-context'
-export { InjectionRegistration as Registration } from './injection-registration'
 export { InjectionContainer as Container } from './injection-container'
+export { InjectionRegistration as Registration } from './injection-registration'
