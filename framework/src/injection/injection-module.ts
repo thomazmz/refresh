@@ -68,7 +68,7 @@ export class InjectionModule extends InjectionContainer implements Core.Initiali
       : super.register(token, options)
   }
 
-  public async initialize(options?: InjectionRegistration.ResolutionOptions) {
+  public async initialize(options?: InjectionRegistration.ResolutionOptions): Promise<void> {
     if(!options?.context) {
       return this.initialize({...options,
         context: InjectionContext.create()
