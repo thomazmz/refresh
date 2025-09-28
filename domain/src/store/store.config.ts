@@ -1,4 +1,4 @@
-import * as Core  from '@refresh/framework/core'
+import { Core }  from '@refresh/framework/core'
 
 export type StoreConfig = Core.Config<InstanceType<typeof StoreConfigInitializer>['profile']>
 

@@ -2,9 +2,14 @@
   "name": "@refresh/domain",
   "version": "1.0.0",
   "type": "commonjs",
-  "main": "dist/library.js",
-  "types": "dist/library.d.ts",
+  "main": "dist/module.js",
+  "types": "dist/module.d.ts",
   "exports": {
+    "./module": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.js",
+      "require": "./dist/module.js"
+    },
     "./*": {
       "types": "./dist/*/library.d.ts",
       "import": "./dist/*/library.js",
@@ -17,7 +22,9 @@
     "build:watch": "tsc --watch --project ./build.json"
   },
   "dependencies": {
-    "@refresh/framework": "workspace:^"
+    "@refresh/framework": "workspace:^",
+    "drizzle-orm": "^0.44.5",
+    "mysql2": "^3.15.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

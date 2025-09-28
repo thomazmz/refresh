@@ -1,6 +1,6 @@
 import { StoreRepository } from './store.repository'
 import { StoreConfig } from './store.config'
-import { Store } from './store.domain'
+import { StoreEntity } from './store.domain'
 
 export class StoreService {
   public constructor(
@@ -8,17 +8,35 @@ export class StoreService {
     private readonly storeConfig: StoreConfig,
   ) {}
 
-  public getStoreById(id: string): Promise<Store> {
+  public getStores(): Promise<StoreEntity[]> {
+    return this.storeRepository.getAll()
+  }
+
+  public getStore(id: string): Promise<StoreEntity> {
     return this.storeRepository.getById(id)
   }
 
+  public deleteStore(id: string): Promise<void> {
+    return this.storeRepository.delete(id)
+  }
+
   public createStore(parameters: {
+    name: string,
+    slug: string,
+  }): Promise<StoreEntity> {
+    return this.storeRepository.create({
+      name: parameters.name,
+      slug: parameters.slug,
+    })
+  }
+
+  public updateStore(id: string, parameters: {
     name?: string,
     slug?: string,
-  }): Promise<Store> {
-    return this.storeRepository.create({
-      name: parameters.name ?? this.storeConfig.defaultTitle,
-      slug: parameters.slug ?? this.storeConfig.defaultSlug,
+  }): Promise<StoreEntity> {
+    return this.storeRepository.update(id, {
+      name: parameters.name,
+      slug: parameters.slug,
     })
   }
 }

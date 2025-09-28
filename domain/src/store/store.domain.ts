@@ -1,4 +1,4 @@
-export type Store = {
+export type StoreEntity = {
   readonly id: string
   readonly name: string
   readonly slug: string
