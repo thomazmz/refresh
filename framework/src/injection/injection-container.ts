@@ -87,10 +87,6 @@ export class InjectionContainer {
     return this.useRegistration(InjectionRegistration.create({ ...options, class: target }))
   }
 
-  public useValue<T extends object>(target: Utils.Constructor<T>, options?: Omit<InjectionContainer.ValueOptions<T>, 'class'>): this {
-    return this.useRegistration(InjectionRegistration.create({ ...options, class: target }))
-  }
-
   public clone(context?: InjectionContext | undefined): InjectionContainer {
     const container = InjectionContainer.create(context)
     container.useRegistrations([...this.registrations.values()])
