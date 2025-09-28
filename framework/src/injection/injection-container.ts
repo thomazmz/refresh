@@ -80,11 +80,11 @@ export class InjectionContainer {
   }
 
   public useFactory<T extends object>(target: Utils.Factory<T>, options?: Omit<InjectionContainer.FactoryOptions<T>, 'factory'>): this {
-    return this.useRegistration(InjectionRegistration.create({ ...options, factory: target }))
+    return this.useRegistration(InjectionRegistration.create({ ...options, factory: target, context: this.context }))
   }
 
   public useClass<T extends object>(target: Utils.Constructor<T>, options?: Omit<InjectionContainer.ClassOptions<T>, 'class'>): this {
-    return this.useRegistration(InjectionRegistration.create({ ...options, class: target }))
+    return this.useRegistration(InjectionRegistration.create({ ...options, class: target, context: this.context }))
   }
 
   public clone(context?: InjectionContext | undefined): InjectionContainer {
