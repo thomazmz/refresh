@@ -91,3 +91,4 @@ logger.log('My Message!') // [InjectionServer]: My Message!
 [ ] Decorator bindings (likely not wanted but could be added as an optional alternative)  
 [ ] Caching bundle resolution (not functional, but likely to improve resolution speed)  
 [ ] Trace resolution stack during initialization to avoid cyclic dependencies  
+[ ] Track initialization state to prevent registrations after initialization  
