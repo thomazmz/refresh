@@ -45,10 +45,6 @@ export class InjectionContainer {
     })
   }
 
-  protected exposes(token: InjectionRegistration.Token): boolean {
-    return Boolean(this.registrations.get(token)?.visibility === 'public')
-  }
-
   protected has(token: InjectionRegistration.Token | object ): boolean {
     return (typeof token === 'function' || typeof token === 'object') 
       ? this.has(Core.Identity.obtain(token))
