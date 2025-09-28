@@ -1,4 +1,5 @@
 import { Core } from '@refresh/framework/core'
+import { InjectionBundle } from './injection-bundle';
 import { InjectionContext } from './injection-context';
 import { InjectionContainer } from './injection-container';
 import { InjectionInitializer } from './injection-initializer';
@@ -76,12 +77,25 @@ export class InjectionModule extends InjectionContainer implements Core.Initiali
     }
 
     for await (const module of this.modules) {
-      await module.initialize(options)
+      await module.initialize({
+        context: options.context,
+        bundle: InjectionBundle.create({
+          context: options.context,
+          bundle: options.bundle,
+          entries: this.entries,
+        }),
+      })
     }
 
     for await (const initializer of this.initializers) {
-      const registration = await initializer.initialize(options)
-      this.useRegistration(registration)
+      this.useRegistration((await initializer.initialize({
+        context: options.context,
+        bundle: InjectionBundle.create({
+          context: options.context,
+          bundle: options.bundle,
+          entries: this.entries,
+        }),
+      })))
     }
   }
 
