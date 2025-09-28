@@ -15,6 +15,5 @@
     "*.js": "javascript",
     "*.ts": "typescript",
     "*.json": "json"
-  },
-  
+  }
 }
