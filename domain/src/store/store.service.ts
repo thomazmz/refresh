@@ -25,8 +25,8 @@ export class StoreService {
     slug: string,
   }): Promise<StoreEntity> {
     return this.storeRepository.create({
-      name: parameters.name,
-      slug: parameters.slug,
+      name: parameters.name ?? this.storeConfig.defaultName,
+      slug: parameters.slug ?? this.storeConfig.defaultSlug,
     })
   }
 
