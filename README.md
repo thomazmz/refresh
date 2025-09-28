@@ -95,12 +95,12 @@
 [ ] Consider extracting configurations into a baseline tsconfig
 
 ## Testing 
-[x] Unit testing with Jest
-[ ] Unit test mocking
-[ ] Integration (controller level) tests through Supertest
-[ ] E2E (application level) tests through HTTP
-[ ] Add easy ways to run individual tests through VS Code
-[ ] Add easy ways to run individual test files through VS Code
+[x] Unit testing with Jest  
+[ ] Unit test mocking  
+[ ] Integration (controller level) tests through Supertest  
+[ ] E2E (application level) tests through HTTP  
+[ ] Add easy ways to run individual tests through VS Code  
+[ ] Add easy ways to run individual test files through VS Code  
 
 ## Tooling
-[ ] Hot realoding
+[ ] Hot realoding  
