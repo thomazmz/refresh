@@ -15,10 +15,6 @@ MysqlModule.register('mysqlPool', {
   visibility: 'private',
 })
 
-
-// MysqlModule.registerInitializer('mysqlConfig', MysqlConfigInitializer)
-// MysqlModule.registerInitializer('mysqlPool', MysqlPoolInitializer)
-
 MysqlModule.register('storeRepository', {
   class: MysqlStoreRepository,
   visibility: 'public',

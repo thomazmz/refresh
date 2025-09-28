@@ -1,9 +1,7 @@
 import { Pool } from 'mysql2/promise'
-
 import { StoreEntity } from '@refresh/domain/store'
 import { StoreRepository } from '@refresh/domain/store'
 import { DrizzleRepository } from '@refresh/framework/drizzle'
-
 import { StoreTable } from './store.table'
 
 export class MysqlStoreRepository extends DrizzleRepository<StoreEntity, typeof StoreTable> implements StoreRepository {
