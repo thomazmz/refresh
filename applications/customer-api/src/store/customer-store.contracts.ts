@@ -1,8 +1,8 @@
 import z from 'zod'
-import { Store } from '@refresh/domain/store'
-import * as Contract from '@refresh/framework/contract'
+import { StoreEntity } from '@refresh/domain/store'
+import { Contract } from '@refresh/framework/contract'
 
-export class CustomerStoreDto extends Contract.Output<Store> {
+export class CustomerStoreDto extends Contract.Output<StoreEntity> {
   @Contract.Schema(z.string())
   public readonly id: string = this._entries.id
 
@@ -24,4 +24,17 @@ export class CreateCustomerStoreBody extends Contract.Input {
   public readonly slug: string
   @Contract.Schema(z.string())
   public readonly name: string
+}
+
+export class UpdateCustomerStoreBody extends Contract.Input {
+  @Contract.Schema(z.string().optional())
+  public readonly slug?: string
+  @Contract.Schema(z.string().optional())
+  public readonly name?: string
+}
+
+export class CustomerStoreListDto extends Contract.OutputList<CustomerStoreDto> {
+  public constructor(stores: StoreEntity[]) {
+    super(stores.map(store => CustomerStoreDto.create(store)))
+  }
 }

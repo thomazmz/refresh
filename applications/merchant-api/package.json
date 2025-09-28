@@ -20,8 +20,7 @@
   "dependencies": {
     "@refresh/domain": "workspace:^",
     "@refresh/framework": "workspace:^",
-    "@types/cors": "^2.8.19",
-    "cors": "^2.8.5",
+    "@refresh/infrastructure": "workspace:^",
     "zod": "^4.1.8"
   },
   "devDependencies": {

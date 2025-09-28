@@ -1,9 +1,9 @@
-import * as Express from '@refresh/framework/express'
-import { StoreModule } from '@refresh/domain/store'
+import { DomainModule } from '@refresh/domain/module'
+import { ExpressModule } from '@refresh/framework/express'
+import { InfrastructureModule } from '@refresh/infrastructure/module'
 import { CustomerStoreController } from './store/customer-store.controller'
 
-export const CustomerModule = Express.Module.create()
-CustomerModule.useController(CustomerStoreController)
-CustomerModule.useModule(StoreModule)
-
-
+export const CustomerApiModule = ExpressModule.create()
+CustomerApiModule.useController(CustomerStoreController)
+CustomerApiModule.useModule(InfrastructureModule)
+CustomerApiModule.useModule(DomainModule)

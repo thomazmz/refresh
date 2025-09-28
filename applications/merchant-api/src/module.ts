@@ -1,9 +1,9 @@
-import * as Express from '@refresh/framework/express'
-import { StoreModule } from '@refresh/domain/store'
+import { DomainModule } from '@refresh/domain/module'
+import { ExpressModule } from '@refresh/framework/express'
+import { InfrastructureModule } from '@refresh/infrastructure/module'
 import { MerchantStoreController } from './store/merchant-store.controller'
 
-export const MarketerModule = Express.Module.create()
-MarketerModule.useController(MerchantStoreController)
-MarketerModule.useModule(StoreModule)
-
-
+export const MerchantApiModule = ExpressModule.create()
+MerchantApiModule.useController(MerchantStoreController)
+MerchantApiModule.useModule(InfrastructureModule)
+MerchantApiModule.useModule(DomainModule)

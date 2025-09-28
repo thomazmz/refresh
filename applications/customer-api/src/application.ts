@@ -1,8 +1,8 @@
-import { CustomerModule } from './module'
+import { CustomerApiModule } from './module'
 
 (async () => {
-  await CustomerModule.initialize()
-  const application = CustomerModule.resolveApplication()
+  await CustomerApiModule.initialize()
+  const application = CustomerApiModule.resolveApplication()
   application.listen(3002, () => {
     console.log('Customer API listening on port 3002')
   })
