@@ -1,7 +1,6 @@
 import express from 'express'
-
+import { Http } from '@refresh/framework/http'
 import { Utils } from '@refresh/framework/utils'
-import { HttpStatus } from '@refresh/framework/http'
 import { Controller } from '@refresh/framework/controller'
 import { InjectionModule } from '@refresh/framework/injection'
 import { InjectionContext } from '@refresh/framework/injection'
@@ -42,16 +41,6 @@ export class ExpressModule extends InjectionModule {
         // nativelly, we should stick with regular Promise chains
         // so that asyncronicity is handled as explicitly as possible.
         const handler: express.RequestHandler = (request, response, next) => {
-          // Parse all the data comming through the request
-          const body = metadata.body?.parse(request.body) ?? {}
-          const query = metadata.query?.parse(request.query) ?? {}
-          const headers = metadata.headers?.parse(request.headers) ?? {}
-
-          // This will resolve the controller instance to be
-          // called, allowing dependency injection to happen
-          // on the scope of each http request. 
-          const controller = this.resolve(constructor)
-          
           // The strings here are the allowed values to be passed
           // during the controller method call. When no match is
           // found, it attempts to find a request parameter value
@@ -59,13 +48,48 @@ export class ExpressModule extends InjectionModule {
           // allow injection of headers, queries, bodies and any
           // parameters included on the method path declaration.
           const argumentz = Object.values(metadata.inputs).map(parameter => {
-            if(parameter === 'body') return body
-            if(parameter === 'query') return query
-            if(parameter === 'headers') return headers
-            if(parameter === 'response') return response
-            if(parameter === 'request') return request
+            if(parameter === 'body') {
+              // We parse the data comming through the request body. If a body metadata is not attachd,
+              // a server error is thrown since it means the controller wants to access the request body
+              // but we haven't assigned a schema to the controller metadata.
+              return metadata.body ? metadata.body.parse(request.body, Http.BadRequestError) : Http.InternalServerError.throw(
+                `Could not provide a "body" parameter to ${constructor.name}:${metadata.key}. Ensure a @Controller.Body annotation is assigned to the route method.`
+              )
+            }
+
+            if(parameter === 'query') {
+              // We parse the data comming through the request query. If a query metadata is not attachd,
+              // a server error is thrown since it means the controller wants to access the request query
+              // but we haven't assigned a schema to the controller metadata.
+              return metadata.query ? metadata.query.parse(request.query, Http.BadRequestError) : Http.InternalServerError.throw(
+                `Could not provide a "query" parameter to ${constructor.name}:${metadata.key}. Ensure a @Controller.Query annotation is assigned to the route method.`
+              )
+            }
+
+            if(parameter === 'headers') {
+              // We parse the data comming through the request headers. If a headers metadata is not attachd,
+              // a server error is thrown since it means the controller wants to access the request headers
+              // but we haven't assigned a schema to the controller metadata.
+              return metadata.headers ? metadata.headers.parse(request.headers, Http.BadRequestError) : Http.InternalServerError.throw(
+                `Could not provide a "headers" parameter to ${constructor.name}:${metadata.key}. Ensure a @Controller.Headers annotation is assigned to the route method.`
+              )
+            }
+
+            if(parameter === 'response') {
+              return response
+            }
+
+            if(parameter === 'request') {
+              return request
+            }
+
             return request.params[parameter]
           })
+
+          // This will resolve the controller instance to be
+          // called, allowing dependency injection to happen
+          // on the scope of each http request. 
+          const controller = this.resolve(constructor)
 
           // Finally, this calls the controller method (identified by
           // the metadata.key) and handles the returned value either
@@ -79,7 +103,7 @@ export class ExpressModule extends InjectionModule {
           })()
 
           return promise.then((result: unknown) => {
-            return metadata.success !== HttpStatus.NoContent
+            return metadata.success !== Http.Status.NoContent
               ? response.status(metadata.success).json(result)
               : response.status(metadata.success).send()
           }).catch((error: Error) => {
