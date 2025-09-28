@@ -1,12 +1,13 @@
 ## Injection
 
-Decorator-free dependency injection for backend Node. Module composition, lifecycle management, scoped resolution, async initializers, and a flexible provisioning for parameter or bundle access.
+Decorator-free dependency injection. Module composition, lifecycle management, scoped resolution, async initializers, and a flexible provisioning for parameter or bundle access.
 
-This library is designed for backend services. Parameter-name provision relies on source parameter names and should not be used with code minification/obfuscation. If you need to minify, use bundle provision or identity tokens instead.
+This library is designed for backend services. Parameter-name provision relies on source code parameter names and should not be used with code minification/obfuscation. If you need to minify, use bundle provision or identity tokens instead.
 
 ### Features
-- **Containers & Modules**: Composable dependency trees
-- **Different Registration Types**: values, functions, factories, and classes.
+- **Containers**: Registry for simple dependency craddles.  
+- **Modules**: Registry for complex composable dependency trees.  
+- **Different Registration Types**: values, functions, factories, and classes.  
 - **Lifecycles**: `singleton`, `scoped`, `transient`.
 - **Provision**: inject dependencies by `parameter` name or via a `bundle` object.
 - **Initializers**: async bootstrapping and teardown that produce registrations.
@@ -16,20 +17,33 @@ This library is designed for backend services. Parameter-name provision relies o
 ## Quick start
 
 ```ts
-import { Module, Container, Bundle, Context, Initializer, Registration } from '@refresh/framework/injection'
+import { Module } from './injection'
 
 // Create a root module
 const root = Module.create()
 
-// Register a value
-root.registerValue('config', { level: 'info' })
+// Declare your dependencies
+class Logger { 
+  private readonly prefix: string
 
-// Register all your classes
-class Logger { constructor(config: { level: string }) {} }
-root.registerClass(Logger)
+  public constructor(config: { level: string }) {
+    this.prefix = config.level
+  }
 
-// Resolve
-const logger = root.resolve(Logger)
+  public log(message: string) {
+    console.log(`[${this.prefix}]: ${message}`)
+  }
+}
+
+// Register as many classes, factories, functions and values as you want
+root.registerValue('config', { prefix: 'InjectionServer' })
+root.registerClass('logger', Logger)
+
+// Resolve the wanted dependency instance
+const logger = root.resolve('logger')
+
+// Use the resolved instance
+logger.log('My Message!') // [InjectionServer]: My Message!
 ```
 
 ## Core concepts
