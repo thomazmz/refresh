@@ -1,5 +1,4 @@
 import { Utils } from '@refresh/framework/utils'
-import { ContractOutput } from './contract-output';
 
 export abstract class ContractOutputList<T> {
   static create<T extends Utils.Constructor>(this: T, ...argumenti: Utils.Constructor.Parameters<T>): InstanceType<T> {
@@ -8,7 +7,7 @@ export abstract class ContractOutputList<T> {
 
   public readonly data: Readonly<T[]>;
 
-  public constructor(schema: typeof ContractOutput.Schema, data: T[]) {
+  public constructor(data: T[]) {
     this.data = Object.freeze(data);
   }
 }
