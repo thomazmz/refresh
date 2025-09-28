@@ -9,8 +9,9 @@ import { CoreRepository } from '@refresh/framework/core'
 import { DrizzleRepositoryTable } from './drizzle-repository-table'
 
 export abstract class DrizzleRepository<E extends CoreEntity, T extends DrizzleRepositoryTable<E>> implements CoreRepository<E> {
-  private readonly database: MySql2Database
-  private readonly table: T
+  protected readonly database: MySql2Database
+  protected readonly table: T
+
   public constructor(mysqlPool: Pool, mysqlTable: T) {
     this.database = drizzle(mysqlPool)
     this.table = mysqlTable
