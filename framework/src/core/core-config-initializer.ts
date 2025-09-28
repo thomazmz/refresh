@@ -1,4 +1,3 @@
-
 import { CoreConfig } from './core-config'
 import { CoreInitializer } from './core-initializer'
 
