@@ -2,9 +2,10 @@
 
 ## Errors
 [ ] Global Error Handling  
-[ ] Define HTTP error classes  
-[ ] Handle HTTP errors during global error handling  
-[ ] Return traceable errors to the client (request id)  
+[x] Define basic HTTP error classes  
+[ ] Define advanced HTTP error classes  
+[ ] Handle HTTP errors return bodies during global error handling  
+[ ] Return traceable error bodies to the client (request id)  
 
 ## Logging
 [ ] Global logging  
@@ -88,7 +89,7 @@
 
 ## API Controller Documentation
 [x] Infer schemas from controller declarations  
-[ ] Dynamically Swagger documentation generation  
+[ ] Dynamic Swagger documentation generation  
 
 ## TypeScript
 [ ] Review and add missing compiler options
