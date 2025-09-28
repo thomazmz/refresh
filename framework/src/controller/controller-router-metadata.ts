@@ -1,4 +1,4 @@
-import * as Utils from '@refresh/framework/utils'
+import { Utils } from '@refresh/framework/utils'
 
 const CONTROLLER_ROUTER_METADATA_KEY = Symbol('__controller_router_metadata')
 

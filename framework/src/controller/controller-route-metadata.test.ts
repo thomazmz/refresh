@@ -1,11 +1,17 @@
-import * as Metadata from './controller-route-metadata'
+import { Path } from './controller-route-metadata'
+import { Method } from './controller-route-metadata'
+import { Success } from './controller-route-metadata'
+import { Summary } from './controller-route-metadata'
+import { Operation } from './controller-route-metadata'
+import { Description } from './controller-route-metadata'
+import { ControllerRouteMetadata } from './controller-route-metadata'
 
 describe('Metadata', () => {
   it('should merge metadata fields', () => {
     const descriptor = { value: function() {} }
-    Metadata.attachRouteMetadata(descriptor, { method: 'post', summary: 'sum', key: 'k1' });
-    Metadata.attachRouteMetadata(descriptor, { description: 'desc', key: 'k1' });
-    const extracted = Metadata.extractRouteMetadata(descriptor);
+    ControllerRouteMetadata.attach(descriptor, { method: 'post', summary: 'sum', key: 'k1' });
+    ControllerRouteMetadata.attach(descriptor, { description: 'desc', key: 'k1' });
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: 'desc',
       operation: undefined,
@@ -19,9 +25,9 @@ describe('Metadata', () => {
 
   it('should override metadata fields', () => {
     const descriptor = { value: function() {} }
-    Metadata.attachRouteMetadata(descriptor, { method: 'post', key: 'k1' });
-    Metadata.attachRouteMetadata(descriptor, { description: 'desc', method: 'get', key: 'k1' });
-    const extracted = Metadata.extractRouteMetadata(descriptor);
+    ControllerRouteMetadata.attach(descriptor, { method: 'post', key: 'k1' });
+    ControllerRouteMetadata.attach(descriptor, { description: 'desc', method: 'get', key: 'k1' });
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: 'desc',
       operation: undefined,
@@ -35,7 +41,7 @@ describe('Metadata', () => {
 
   it('should return empty metadata', () => {
     const descriptor = { value: function() {} }
-    const extracted = Metadata.extractRouteMetadata(descriptor);
+    const extracted = ControllerRouteMetadata.extract(descriptor);
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -49,8 +55,8 @@ describe('Metadata', () => {
 
   it('should return empty metadata when descriptor.value is missing', () => {
     const descriptor = {} as any
-    Metadata.attachRouteMetadata(descriptor, { description: 'desc', key: 'k1' })
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    ControllerRouteMetadata.attach(descriptor, { description: 'desc', key: 'k1' })
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -64,8 +70,8 @@ describe('Metadata', () => {
 
   it('should attach summary metadata with Summary decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Summary('sum')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Summary('sum')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -79,8 +85,8 @@ describe('Metadata', () => {
 
   it('should attach description metadata with Description decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Description('desc')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Description('desc')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: 'desc',
       operation: undefined,
@@ -94,8 +100,8 @@ describe('Metadata', () => {
 
   it('should attach operation metadata with Operation decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Operation('op')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Operation('op')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: 'op',
@@ -109,8 +115,8 @@ describe('Metadata', () => {
 
   it('should attach success metadata with Success decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Success(200)(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Success(200)(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -124,8 +130,8 @@ describe('Metadata', () => {
 
   it('should attach method metadata with Method decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Method('get')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Method('get')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -139,8 +145,8 @@ describe('Metadata', () => {
 
   it('should attach path metadata with Path decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Path('/foo')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Path('/foo')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -154,8 +160,8 @@ describe('Metadata', () => {
 
   it('should attach summary metadata with Summary decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Summary('summary-value')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Summary('summary-value')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -169,8 +175,8 @@ describe('Metadata', () => {
 
   it('should attach description metadata with Description decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Description('desc-value')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Description('desc-value')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: 'desc-value',
       operation: undefined,
@@ -184,8 +190,8 @@ describe('Metadata', () => {
 
   it('should attach operation metadata with Operation decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Operation('operation-value')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Operation('operation-value')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: 'operation-value',
@@ -199,8 +205,8 @@ describe('Metadata', () => {
 
   it('should attach success metadata with Success decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Success(201)(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Success(201)(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -214,8 +220,8 @@ describe('Metadata', () => {
 
   it('should attach method metadata with Method decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Method('put')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Method('put')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,
@@ -229,8 +235,8 @@ describe('Metadata', () => {
 
   it('should attach path metadata with Path decorator', () => {
     const descriptor = { value: function() {} }
-    Metadata.Path('/bar')(null, 'k1', descriptor)
-    const extracted = Metadata.extractRouteMetadata(descriptor)
+    Path('/bar')(null, 'k1', descriptor)
+    const extracted = ControllerRouteMetadata.extract(descriptor)
     expect(extracted).toEqual({
       description: undefined,
       operation: undefined,

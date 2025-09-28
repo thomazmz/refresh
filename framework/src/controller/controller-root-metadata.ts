@@ -1,5 +1,6 @@
-import * as Http from '@refresh/framework/http';
-import * as Utils from '@refresh/framework/utils';
+import { Utils } from '@refresh/framework/utils';
+import { HttpStatus } from '@refresh/framework/http';
+import { HttpMethod } from '@refresh/framework/http';
 import { ControllerInputMetadata } from './controller-input-metadata';
 import { ControllerRouteMetadata } from './controller-route-metadata';
 import { ControllerRouterMetadata } from './controller-router-metadata';
@@ -8,8 +9,8 @@ export type ControllerRootMetadata = ControllerRouterMetadata & {
   readonly path: string,
   readonly routes: (ControllerRouteMetadata & {
     readonly inputs: ControllerInputMetadata
-    readonly success: Http.Status
-    readonly method: Http.Method
+    readonly success: HttpStatus
+    readonly method: HttpMethod
     readonly path: string,
     readonly key: string,
   })[]
@@ -32,8 +33,8 @@ export function extractControllerRootMetadata(controller: Utils.Constructor): Co
     const inputMetadata = ControllerInputMetadata.extract(member)
 
     return { ...methodMetadata,
-      success: methodMetadata.success ?? Http.Status.Ok,
-      method: methodMetadata.method ?? Http.Method.Get,
+      success: methodMetadata.success ?? HttpStatus.Ok,
+      method: methodMetadata.method ?? HttpMethod.Get,
       inputs: inputMetadata,
     }
   })

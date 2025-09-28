@@ -1,1 +1,2 @@
-export { ExpressModule as Module } from './express-module'
+export * from './express-module'
+export { ExpressModule } from './express-module'

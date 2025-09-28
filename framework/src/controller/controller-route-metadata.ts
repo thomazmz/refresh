@@ -1,6 +1,6 @@
-import * as Contract from '@refresh/framework/contract'
-import * as Utils from '@refresh/framework/utils'
-import * as Http from '@refresh/framework/http'
+import { Contract } from '@refresh/framework/contract'
+import { Utils } from '@refresh/framework/utils'
+import { Http } from '@refresh/framework/http'
 
 const CONTROLLER_ROUTE_METADATA_KEY = Symbol('__controller_method_metadata')
 

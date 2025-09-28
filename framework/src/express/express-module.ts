@@ -1,12 +1,14 @@
 import express from 'express'
-import * as Http from '@refresh/framework/http'
-import * as Utils from '@refresh/framework/utils'
-import * as Injection from '@refresh/framework/injection'
-import * as Controller from '@refresh/framework/controller'
 
-export class ExpressModule extends Injection.Module {
-  public static create(context?: Injection.Context): ExpressModule {
-    return new ExpressModule(context ?? Injection.Context.create())
+import { Utils } from '@refresh/framework/utils'
+import { HttpStatus } from '@refresh/framework/http'
+import { Controller } from '@refresh/framework/controller'
+import { InjectionModule } from '@refresh/framework/injection'
+import { InjectionContext } from '@refresh/framework/injection'
+
+export class ExpressModule extends InjectionModule {
+  public static create(context?: InjectionContext): ExpressModule {
+    return new ExpressModule(context ?? InjectionContext.create())
   }
 
   private readonly controllers: Utils.Constructor[] = []
@@ -77,7 +79,7 @@ export class ExpressModule extends Injection.Module {
           })()
 
           return promise.then((result: unknown) => {
-            return metadata.success !== Http.Status.NoContent
+            return metadata.success !== HttpStatus.NoContent
               ? response.status(metadata.success).json(result)
               : response.status(metadata.success).send()
           }).catch((error: Error) => {

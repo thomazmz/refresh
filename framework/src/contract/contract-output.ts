@@ -1,5 +1,5 @@
+import { Utils } from '@refresh/framework/utils'
 import { ContractObject } from './contract-object';
-import * as Utils from '@refresh/framework/utils'
 
 export class ContractOutput<E = undefined> extends ContractObject {
   declare protected readonly _entries: E

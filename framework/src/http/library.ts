@@ -1,3 +1,4 @@
-export { HttpMethod as Method } from './http-method'
-export { HttpStatus as Status } from './http-status'
-export { HttpResponse as Response } from './http-response'
+export * as Http from './http'
+export { HttpMethod } from './http-method'
+export { HttpStatus } from './http-status'
+export { HttpResponse } from './http-response'

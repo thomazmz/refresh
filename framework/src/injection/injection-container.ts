@@ -1,5 +1,5 @@
-import * as Core  from '@refresh/framework/core'
-import * as Utils from '@refresh/framework/utils'
+import { Core } from '@refresh/framework/core'
+import { Utils } from '@refresh/framework/utils'
 import { InjectionBundle } from './injection-bundle'
 import { InjectionContext } from './injection-context'
 import { InjectionRegistration } from './injection-registration'

@@ -1,4 +1,4 @@
-import * as Core from '@refresh/framework/core'
+import { Core } from '@refresh/framework/core'
 import { InjectionRegistration } from './injection-registration'
 
 export class InjectionContext {

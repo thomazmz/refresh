@@ -1,4 +1,4 @@
-import * as Core from '@refresh/framework/core'
+import { Core } from '@refresh/framework/core'
 import { InjectionContext } from './injection-context';
 import { InjectionContainer } from './injection-container';
 import { InjectionInitializer } from './injection-initializer';

@@ -1,14 +1,14 @@
 import * as acorn from 'acorn'
 
-export type _Function<R = any, P extends Array<any> = any[]> = (...args: P) => R
+export type UtilsFunction<R = any, P extends Array<any> = any[]> = (...args: P) => R
 
-export declare namespace _Function {
-  export type Return<F extends _Function> = ReturnType<F>
-  export type  Prameters<F extends _Function> = Parameters<F>
+export declare namespace UtilsFunction {
+  export type Return<F extends UtilsFunction> = ReturnType<F>
+  export type  Prameters<F extends UtilsFunction> = Parameters<F>
 }
 
-export const _Function = Object.freeze({
-  extractParameters(target: _Function): string[] {
+export const UtilsFunction = Object.freeze({
+  extractParameters(target: UtilsFunction): string[] {
     const code = Function.prototype.toString.call(target).trim();
 
     // Try wrapping the target as function

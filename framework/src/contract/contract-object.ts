@@ -1,5 +1,5 @@
 import z from 'zod'
-import * as Utils from '@refresh/framework/utils'
+import { Utils } from '@refresh/framework/utils'
 import { ContractProperty } from './contract-property'
 
 const CONTRACT_OBJECT_METADATA_KEY = Symbol('__contract_object_metadata')

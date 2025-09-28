@@ -1,26 +1,33 @@
-import * as Http from '@refresh/framework/http'
-import * as RootMetadata from './controller-root-metadata'
-import * as RouteMetadata from './controller-route-metadata'
-import * as RouterMetadata from './controller-router-metadata'
+import { HttpMethod } from '@refresh/framework/http'
+import { HttpStatus } from '@refresh/framework/http'
+import { Router } from './controller-router-metadata'
+import { Name } from './controller-router-metadata'
+import { Path } from './controller-route-metadata'
+import { Method } from './controller-route-metadata'
+import { Success } from './controller-route-metadata'
+import { Summary } from './controller-route-metadata'
+import { Operation } from './controller-route-metadata'
+import { Description } from './controller-route-metadata'
+import { ControllerRootMetadata } from './controller-root-metadata'
 
 describe('ControllerAggregate', () => {
   it('should resolve default root metadata', () => {
 
-    @RouterMetadata.Router('/routee')
+    @Router('/routee')
     class SomeController {
-      @RouteMetadata.Path('/barbarbar')
+      @Path('/barbarbar')
       public getBarById(headers: string, query: string, body: string, id: string) {
         throw new Error('Should not be called')
       }
     }
 
-    const rootMetadata = RootMetadata.extractControllerRootMetadata(SomeController)
+    const rootMetadata = ControllerRootMetadata.extract(SomeController)
 
     expect(rootMetadata.name).toEqual('SomeController')
     expect(rootMetadata.path).toEqual('/routee')
 
-    expect(rootMetadata.routes?.[0]?.success).toEqual(Http.Status.Ok)
-    expect(rootMetadata.routes?.[0]?.method).toEqual(Http.Method.Get)
+    expect(rootMetadata.routes?.[0]?.success).toEqual(HttpStatus.Ok)
+    expect(rootMetadata.routes?.[0]?.method).toEqual(HttpMethod.Get)
 
     expect(rootMetadata.routes?.[0]?.description).toEqual(undefined)
     expect(rootMetadata.routes?.[0]?.operation).toEqual(undefined)
@@ -38,27 +45,27 @@ describe('ControllerAggregate', () => {
 
   it('should resolve explicit rootMetadata metadata', () => {
 
-    @RouterMetadata.Name('SomeController')
-    @RouterMetadata.Router('/routee')
+    @Name('SomeController')
+    @Router('/routee')
     class SomeController {
-      @RouteMetadata.Path('/foofoofoo')
-      @RouteMetadata.Method(Http.Method.Post)
-      @RouteMetadata.Success(Http.Status.Created)
-      @RouteMetadata.Operation('CreateFoo')
-      @RouteMetadata.Summary('Create Foo')
-      @RouteMetadata.Description('Creates a nice foo.')
+      @Path('/foofoofoo')
+      @Method(HttpMethod.Post)
+      @Success(HttpStatus.Created)
+      @Operation('CreateFoo')
+      @Summary('Create Foo')
+      @Description('Creates a nice foo.')
       public createFoo(headers: string, query: string, body: string, id: string) {
         throw new Error('Should not be called')
       }
     }
 
-    const rootMetadata = RootMetadata.extractControllerRootMetadata(SomeController);
+    const rootMetadata = ControllerRootMetadata.extract(SomeController);
 
     expect(rootMetadata.name).toEqual('SomeController')
     expect(rootMetadata.path).toEqual('/routee')
 
-    expect(rootMetadata.routes?.[0]?.success).toEqual(Http.Status.Created)
-    expect(rootMetadata.routes?.[0]?.method).toEqual(Http.Method.Post)
+    expect(rootMetadata.routes?.[0]?.success).toEqual(HttpStatus.Created)
+    expect(rootMetadata.routes?.[0]?.method).toEqual(HttpMethod.Post)
 
     expect(rootMetadata.routes?.[0]?.description).toEqual('Creates a nice foo.')
     expect(rootMetadata.routes?.[0]?.operation).toEqual('CreateFoo')
