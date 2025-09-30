@@ -62,7 +62,6 @@ export declare namespace InjectionRegistration {
   export type ValueOptions<T> = {
     token: InjectionRegistration.Token,
     context?: InjectionContext | undefined,
-    lifecycle?: InjectionRegistration.LifecycleMode | undefined
     visibility?: InjectionRegistration.VisibilityMode | undefined
     value: T
   }
@@ -125,7 +124,6 @@ export class InjectionRegistration<T = any> {
     if('value' in options ) {
       this.resolver = InjectionRegistration.createValueResolver(options)
       this.token = options.token ?? Core.Identity.obtain(this.resolver)
-      this.lifecycle = options.lifecycle ?? InjectionRegistration.DEFAULT_LIFECYCLE_MODE
       this.visibility = options.visibility ?? InjectionRegistration.DEFAULT_VISIBILITY_MODE
     }
 
