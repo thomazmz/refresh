@@ -21,7 +21,6 @@ describe('UtilsFunction', () => {
       expect(result.length).toBe(2)
       expect(result[0]).toEqual('param1')
       expect(result[1]).toEqual('param2')
-
     })
 
     it('should return arrow function declaration parameters', () => {

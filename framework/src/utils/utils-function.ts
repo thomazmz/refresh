@@ -35,7 +35,7 @@ export const UtilsFunction = Object.freeze({
 
       // We can not continue in case the AST parsed
       // code does not yield a valid function expression.
-      if (!(expression.type === 'FunctionExpression') || !(expression.type === 'ArrowFunctionExpression')) {
+      if (expression.type !== 'FunctionExpression' && expression.type !== 'ArrowFunctionExpression') {
         throw new Error('The provided function code could not be parsed into a function AST expression');
       }
 
